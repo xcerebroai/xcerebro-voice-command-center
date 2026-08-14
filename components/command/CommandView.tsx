@@ -5,6 +5,7 @@ import { Send } from "lucide-react";
 import { useAgentRuntime } from "@/lib/agent-runtime";
 import { runCommand } from "@/lib/demo-sequence";
 import VoiceOrb from "./VoiceOrb";
+import MicButton from "./MicButton";
 import Waveform from "./Waveform";
 import Transcript from "./Transcript";
 import ActiveContext from "./ActiveContext";
@@ -71,6 +72,7 @@ export default function CommandView() {
             submit();
           }}
         >
+          <MicButton />
           <input
             ref={inputRef}
             value={input}
