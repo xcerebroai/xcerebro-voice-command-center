@@ -1,0 +1,261 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #05070c;
+  --panel: #0a0f1a;
+  --panel-2: #0d1524;
+  --line: rgba(120, 160, 255, 0.08);
+  --blue: #4d9fff;
+  --blue-soft: rgba(77, 159, 255, 0.35);
+  --gold: #d8b26e;
+  --ink: #e8ecf4;
+  --muted: #8b97ad;
+  --danger: #e06c6c;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1200px 700px at 50% -10%, rgba(38, 64, 110, 0.25), transparent 60%),
+    var(--bg);
+  color: var(--ink);
+  font-feature-settings: "ss01";
+  overflow: hidden;
+}
+
+/* ---------- panels ---------- */
+
+.panel {
+  background: linear-gradient(180deg, rgba(20, 30, 52, 0.55), rgba(10, 15, 26, 0.85));
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+}
+
+.panel-title {
+  @apply text-[11px] font-mono tracking-[0.25em] text-muted;
+}
+
+/* ---------- scrollbars ---------- */
+
+.scroll-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: rgba(120, 160, 255, 0.15);
+  border-radius: 3px;
+}
+
+/* ---------- voice orb ---------- */
+
+.orb {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  display: grid;
+  place-items: center;
+}
+
+.orb-core {
+  position: absolute;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(190, 220, 255, 0.9), rgba(77, 159, 255, 0.55) 35%, rgba(20, 50, 100, 0.9) 75%);
+  box-shadow:
+    0 0 24px rgba(77, 159, 255, 0.35),
+    0 0 80px rgba(77, 159, 255, 0.12),
+    inset 0 0 24px rgba(150, 200, 255, 0.25);
+  animation: orb-idle 4.5s ease-in-out infinite;
+}
+
+@keyframes orb-idle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+
+/* listening: rings expand outward */
+.orb-ring {
+  position: absolute;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 1px solid rgba(77, 159, 255, 0.55);
+  opacity: 0;
+  pointer-events: none;
+}
+.orb[data-state="listening"] .orb-ring {
+  animation: orb-ring 1.8s ease-out infinite;
+}
+.orb[data-state="listening"] .orb-ring:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.orb[data-state="listening"] .orb-ring:nth-child(4) {
+  animation-delay: 1.2s;
+}
+@keyframes orb-ring {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2.05); opacity: 0; }
+}
+
+/* thinking: orbiting particles */
+.orb-orbit {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+.orb[data-state="thinking"] .orb-orbit,
+.orb[data-state="recalling"] .orb-orbit {
+  opacity: 1;
+  animation: orb-spin 3.2s linear infinite;
+}
+.orb[data-state="recalling"] .orb-orbit {
+  animation-duration: 5s;
+}
+.orb-orbit .dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 8px rgba(77, 159, 255, 0.8);
+  left: 50%;
+  top: -3px;
+  margin-left: -3px;
+}
+.orb-orbit .dot:nth-child(2) { top: auto; bottom: -3px; }
+.orb-orbit .dot:nth-child(3) { top: 50%; left: -3px; margin-top: -3px; margin-left: 0; }
+.orb-orbit .dot:nth-child(4) { top: 50%; left: auto; right: -3px; margin-top: -3px; margin-left: 0; }
+@keyframes orb-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* recalling: constellation dots blink around the orb */
+.orb-recall {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.orb[data-state="recalling"] .orb-recall {
+  opacity: 1;
+}
+.orb-recall .node {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px rgba(216, 178, 110, 0.8);
+  animation: recall-blink 1.6s ease-in-out infinite;
+}
+.orb-recall .node:nth-child(1) { top: 12%; left: 22%; }
+.orb-recall .node:nth-child(2) { top: 8%; right: 28%; animation-delay: 0.3s; }
+.orb-recall .node:nth-child(3) { bottom: 14%; left: 14%; animation-delay: 0.6s; }
+.orb-recall .node:nth-child(4) { bottom: 10%; right: 18%; animation-delay: 0.9s; }
+@keyframes recall-blink {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* executing: mechanical rotating indicator */
+.orb-gear {
+  position: absolute;
+  width: 126px;
+  height: 126px;
+  border-radius: 50%;
+  border: 1px dashed rgba(216, 178, 110, 0.55);
+  opacity: 0;
+  pointer-events: none;
+}
+.orb[data-state="executing"] .orb-gear {
+  opacity: 1;
+  animation: orb-spin 2.4s linear infinite;
+}
+.orb[data-state="executing"] .orb-core {
+  animation: orb-exec 0.9s ease-in-out infinite;
+}
+@keyframes orb-exec {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.97); }
+}
+
+/* speaking: fast glow pulse (waveform bars render separately) */
+.orb[data-state="speaking"] .orb-core {
+  animation: orb-speak 0.8s ease-in-out infinite;
+}
+@keyframes orb-speak {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 24px rgba(77, 159, 255, 0.4), 0 0 90px rgba(77, 159, 255, 0.18),
+      inset 0 0 24px rgba(150, 200, 255, 0.3);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 40px rgba(77, 159, 255, 0.6), 0 0 120px rgba(77, 159, 255, 0.25),
+      inset 0 0 30px rgba(150, 200, 255, 0.4);
+  }
+}
+
+/* error */
+.orb[data-state="error"] .orb-core {
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 200, 200, 0.9), rgba(224, 108, 108, 0.5) 35%, rgba(90, 25, 25, 0.9) 75%);
+  box-shadow: 0 0 24px rgba(224, 108, 108, 0.4), 0 0 80px rgba(224, 108, 108, 0.15);
+  animation: orb-idle 1.4s ease-in-out infinite;
+}
+
+/* ---------- waveform ---------- */
+
+.waveform-bar {
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--blue), rgba(77, 159, 255, 0.25));
+  transition: height 120ms ease;
+}
+
+/* ---------- activity feed ---------- */
+
+.feed-row {
+  animation: feed-in 260ms ease-out;
+}
+@keyframes feed-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- context items ---------- */
+
+.ctx-active {
+  border-color: rgba(77, 159, 255, 0.45) !important;
+  background: rgba(77, 159, 255, 0.08) !important;
+  box-shadow: 0 0 18px rgba(77, 159, 255, 0.12);
+}
+
+/* ---------- react flow theming ---------- */
+
+.react-flow__attribution {
+  display: none;
+}
+.react-flow {
+  background: transparent;
+}
+.react-flow__edge-path {
+  stroke: rgba(120, 160, 255, 0.25);
+}
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke: var(--blue);
+}
