@@ -5,6 +5,7 @@ import { Play, LoaderCircle } from "lucide-react";
 import { useAgentRuntime } from "@/lib/agent-runtime";
 import { runMarcusDemo } from "@/lib/demo-sequence";
 import CommandView from "@/components/command/CommandView";
+import StatsBar from "@/components/command/StatsBar";
 import BrainView from "@/components/brain/BrainView";
 import FlowView from "@/components/flow/FlowView";
 
@@ -75,6 +76,9 @@ export default function Home() {
           </button>
         </div>
       </header>
+
+      {/* Jarvis / GHL pipeline KPIs (mocked until Phase 2) */}
+      <StatsBar />
 
       {/* views — all stay mounted so one event stream drives all three */}
       <main className="min-h-0 flex-1">
