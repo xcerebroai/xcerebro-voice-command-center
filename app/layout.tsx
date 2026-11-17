@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "X Cerebro — Voice Command Center",
-  description: "JARVIS-style AI operating system with an Obsidian-style memory graph.",
+  title: "Xcerebro",
+  description: "Explore Xcerebro and access your client experience.",
 };
 
 export default function RootLayout({
